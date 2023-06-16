@@ -26,6 +26,12 @@
 pnpm install
 ```
 
+### Run generate sql file
+```bash
+pnpm db:generate
+```
+After generate sql file, you can copy sql file to your database and run it.
+
 ### Run the development server
 
 You can start the server using this command:
@@ -71,6 +77,7 @@ body none
 @access Private
 @desc Get user profile
 route GET /api/user/profile
+body none
 
 @access Private
 @desc Update user name profile

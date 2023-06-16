@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "nodemon src/main.ts",
     "build": "tsc",
-    "migrate": "drizzle-kit generate:pg"
+    "db:generate": "drizzle-kit generate:pg"
   },
   "dependencies": {
     "argon2": "^0.30.3",
