@@ -81,7 +81,7 @@ body none
 
 @access Private
 @desc Update user name profile
-route PUT /api/user/name
+route PATCH /api/user/name
 body
 
 ```json
@@ -92,7 +92,7 @@ body
 
 @access Private
 @desc Update user name profile
-route PUT /api/user/password
+route PATCH /api/user/password
 body
 
 ```json

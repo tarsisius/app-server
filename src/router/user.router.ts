@@ -34,13 +34,13 @@ userRouter.get('/api/user/profile', privateRoute, profileUserHandler)
 
 // @access Private
 // @desc Update user name profile
-// route PUT /api/user/name
-userRouter.put('/api/user/update/name', privateRoute, updateUserNameHandler)
+// route PATCH /api/user/name
+userRouter.patch('/api/user/update/name', privateRoute, updateUserNameHandler)
 
 // @access Private
 // @desc Update user name profile
-// route PUT /api/user/password
-userRouter.put(
+// route PATCH /api/user/password
+userRouter.patch(
   '/api/user/update/password',
   privateRoute,
   updateUserPasswordHandler
