@@ -26,7 +26,7 @@ export async function registerUserHandler(req: Request, res: Response) {
     return
   }
 
-  const { email, name, password } = parse.data
+  const { name, email, password } = parse.data
 
   const checkEmail = await getUserByEmail(email)
 
@@ -36,7 +36,7 @@ export async function registerUserHandler(req: Request, res: Response) {
   }
 
   const hashedPassword = await argon2.hash(password)
-  const user = await insertUser({ email, name, password: hashedPassword })
+  const user = await insertUser({ name, email, password: hashedPassword })
 
   if (!user) {
     res.status(500).send({ message: 'Error when create user' })

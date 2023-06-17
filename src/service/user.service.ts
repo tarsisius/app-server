@@ -7,8 +7,8 @@ export async function getUserById(id: string) {
   const result = await db
     .select({
       id: users.id,
-      email: users.email,
       name: users.name,
+      email: users.email,
     })
     .from(users)
     .where(eq(users.id, id))
@@ -38,8 +38,8 @@ export async function insertUser(data: RegisterUserBody) {
     })
     .returning({
       id: users.id,
-      email: users.email,
       name: users.name,
+      email: users.email,
     })
 
   if (!result.length) {
@@ -58,8 +58,8 @@ export async function updateUserName(name: string, id: string) {
     .where(eq(users.id, id))
     .returning({
       id: users.id,
-      email: users.email,
       name: users.name,
+      email: users.email,
     })
 
   if (!result.length) {

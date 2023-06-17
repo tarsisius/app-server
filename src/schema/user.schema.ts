@@ -2,8 +2,8 @@ import { z } from 'zod'
 
 // register
 export const registerUserBody = z.object({
-  email: z.string().email(),
   name: z.string(),
+  email: z.string().email(),
   password: z.string().min(6),
 })
 
