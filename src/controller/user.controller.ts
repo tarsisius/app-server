@@ -80,7 +80,12 @@ export async function loginUserHandler(req: Request, res: Response) {
 
   setTokenToCookie(res, token)
 
-  res.send({ token })
+  const returnUser = {
+    name: user.name,
+    email: user.email,
+  }
+
+  res.send(returnUser)
   return
 }
 
