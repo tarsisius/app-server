@@ -5,6 +5,7 @@ import {
   loginUserHandler,
   logoutUserHandler,
   profileUserHandler,
+  refreshTokenUserHandler,
   registerUserHandler,
   updateUserNameHandler,
   updateUserPasswordHandler,
@@ -13,19 +14,24 @@ import {
 const userRouter = Router()
 
 // @access Public
-// @desc Register new user
+// @desc Register new user & set refreshToken and accessToken
 // route POST /api/user/register
 userRouter.post('/api/user/register', registerUserHandler)
 
 // @access Public
-// @desc Login user/set token
+// @desc Login user/set refreshToken and accessToken
 // route POST /api/user/login
 userRouter.post('/api/user/login', loginUserHandler)
 
 // @access Public
 // @desc Logout user/delete token
-// route POST /api/user/logout
-userRouter.post('/api/user/logout', logoutUserHandler)
+// route GET /api/user/logout
+userRouter.get('/api/user/logout', logoutUserHandler)
+
+// @access Public
+// @desc Refresh accessToken
+// route GET /api/user/refresh
+userRouter.get('/api/user/refresh', refreshTokenUserHandler)
 
 // @access Private
 // @desc Get user profile

@@ -20,6 +20,19 @@ export async function getUserById(id: string) {
   return result[0]
 }
 
+export async function getUserByRefreshToken(refreshToken: string) {
+  const result = await db
+    .select()
+    .from(users)
+    .where(eq(users.refreshToken, refreshToken))
+
+  if (!result.length) {
+    return null
+  }
+
+  return result[0]
+}
+
 export async function getUserByEmail(email: string) {
   const result = await db.select().from(users).where(eq(users.email, email))
 
@@ -87,4 +100,33 @@ export async function updateUserPassword(password: string, id: string) {
   }
 
   return result[0]
+}
+
+export async function updateUserRefreshToken(
+  refreshToken: string | null,
+  id: string
+) {
+  const result = await db
+    .update(users)
+    .set({
+      refreshToken,
+    })
+    .where(eq(users.id, id))
+    .returning({
+      id: users.id,
+      email: users.email,
+      name: users.name,
+    })
+
+  if (!result.length) {
+    return null
+  }
+
+  return result[0]
+}
+
+export async function deleteUserById(id: string) {
+  const result = await db.delete(users).where(eq(users.id, id)).returning()
+
+  return result
 }

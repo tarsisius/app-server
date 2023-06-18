@@ -3,9 +3,8 @@ import express from 'express'
 import cookieParser from 'cookie-parser'
 import helmet from 'helmet'
 import cors from 'cors'
-import pino from 'pino-http'
 
-import logger from './util/logger'
+import logger, { httpLogger } from './util/logger'
 import config from './util/config'
 
 import userRouter from './router/user.router'
@@ -20,8 +19,8 @@ function start() {
   app.use(cookieParser())
   app.use(helmet())
   app.use(cors())
-  app.use(pino())
 
+  app.use(httpLogger)
   app.use(userRouter)
 
   app.set('port', port)

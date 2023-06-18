@@ -45,7 +45,7 @@ Open [http://localhost:3000](http://localhost:3000) with your api tester like po
 ## Endpoint
 
 @access Public
-@desc Register new user
+@desc Register new user & set refreshToken and accessToken
 route POST /api/user/register
 body
 
@@ -58,7 +58,7 @@ body
 ```
 
 @access Public
-@desc Login user/set token
+@desc Login user/set accessToken
 route POST /api/user/login
 body
 
@@ -70,9 +70,13 @@ body
 ```
 
 @access Public
-@desc Logout user/delete token
-route POST /api/user/logout
+@desc Logout user/delete accessToken
+route GET /api/user/logout
 body none
+
+@access Public
+@desc Refresh accessToken
+route GET /api/user/refresh
 
 @access Private
 @desc Get user profile
