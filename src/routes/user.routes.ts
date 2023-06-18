@@ -13,43 +13,41 @@ import {
 
 const userRoutes = Router()
 
+userRoutes.use('/api', userRoutes)
+
 // @access Public
 // @desc Register new user & set refreshToken and accessToken
 // route POST /api/user/register
-userRoutes.post('/api/user/register', registerUserHandler)
+userRoutes.post('/user/register', registerUserHandler)
 
 // @access Public
 // @desc Login user/set refreshToken and accessToken
 // route POST /api/user/login
-userRoutes.post('/api/user/login', loginUserHandler)
+userRoutes.post('/user/login', loginUserHandler)
 
 // @access Public
 // @desc Logout user/delete token
 // route GET /api/user/logout
-userRoutes.get('/api/user/logout', logoutUserHandler)
+userRoutes.get('/user/logout', logoutUserHandler)
 
 // @access Public
 // @desc Refresh accessToken
 // route GET /api/user/refresh
-userRoutes.get('/api/user/refresh', refreshTokenUserHandler)
+userRoutes.get('/user/refresh', refreshTokenUserHandler)
 
 // @access Private
 // @desc Get user profile
 // route GET /api/user/profile
-userRoutes.get('/api/user/profile', verifyUser, profileUserHandler)
+userRoutes.get('/user/profile', verifyUser, profileUserHandler)
 
 // @access Private
 // @desc Update user name profile
 // route PATCH /api/user/name
-userRoutes.patch('/api/user/update/name', verifyUser, updateUserNameHandler)
+userRoutes.patch('/user/update/name', verifyUser, updateUserNameHandler)
 
 // @access Private
 // @desc Update user name profile
 // route PATCH /api/user/password
-userRoutes.patch(
-  '/api/user/update/password',
-  verifyUser,
-  updateUserPasswordHandler
-)
+userRoutes.patch('/user/update/password', verifyUser, updateUserPasswordHandler)
 
 export default userRoutes
