@@ -6,7 +6,6 @@ export const users = pgTable('users', {
   name: varchar('name', { length: 256 }).notNull(),
   email: varchar('email', { length: 256 }).notNull(),
   password: varchar('password', { length: 256 }).notNull(),
-  refreshToken: varchar('refresh_token', { length: 256 }),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })
 

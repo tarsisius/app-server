@@ -13,11 +13,12 @@ import {
   getUserById,
   updateUserName,
   updateUserPassword,
-  updateUserRefreshToken,
-  deleteUserById,
-  getUserByRefreshToken,
-} from '../service/user.service'
-import { getJwtToken, verifyJwtRefreshToken } from '../util/token'
+} from '../query/user.query'
+import {
+  getJwtAccessToken,
+  getJwtRefreshToken,
+  verifyJwtRefreshToken,
+} from '../util/token'
 import { deleteTokenInCookie, setTokenToCookie } from '../util/cookie'
 
 export async function registerUserHandler(req: Request, res: Response) {
@@ -46,18 +47,12 @@ export async function registerUserHandler(req: Request, res: Response) {
     return
   }
 
-  const { accessToken, refreshToken } = await getJwtToken({ id: user.id })
-
-  const update = await updateUserRefreshToken(refreshToken, user.id)
-
-  if (!update) {
-    await deleteUserById(user.id)
-
-    res.status(500).send({ message: 'Error when create user' })
-    return
-  }
+  
+  const refreshToken = await getJwtRefreshToken({ id: user.id })
 
   setTokenToCookie(res, refreshToken)
+  
+  const accessToken = await getJwtAccessToken({ id: user.id })
 
   res.send({ accessToken })
   return
@@ -88,16 +83,11 @@ export async function loginUserHandler(req: Request, res: Response) {
     return
   }
 
-  const { accessToken, refreshToken } = await getJwtToken({ id: user.id })
-
-  const update = await updateUserRefreshToken(refreshToken, user.id)
-
-  if (!update) {
-    res.status(500).send({ message: 'Error when login user' })
-    return
-  }
+  const refreshToken = await getJwtRefreshToken({ id: user.id })
 
   setTokenToCookie(res, refreshToken)
+
+  const accessToken = await getJwtAccessToken({ id: user.id })
 
   res.send({ accessToken })
   return
@@ -111,13 +101,6 @@ export async function refreshTokenUserHandler(req: Request, res: Response) {
     return
   }
 
-  const user = await getUserByRefreshToken(refreshToken)
-
-  if (!user) {
-    res.status(403).send({ message: 'Invalid refreshToken' })
-    return
-  }
-
   const verify = await verifyJwtRefreshToken(refreshToken)
 
   if (!verify) {
@@ -125,7 +108,14 @@ export async function refreshTokenUserHandler(req: Request, res: Response) {
     return
   }
 
-  const { accessToken } = await getJwtToken({ id: user.id })
+  const user = await getUserById(verify.id)
+
+  if (!user) {
+    res.status(401).send({ message: 'Unauthorized' })
+    return
+  }
+
+  const accessToken = await getJwtAccessToken({ id: user.id })
 
   res.send({ accessToken })
   return
@@ -136,22 +126,6 @@ export async function logoutUserHandler(req: Request, res: Response) {
 
   if (!refreshToken) {
     res.send({ message: 'Logout success' })
-    return
-  }
-
-  const user = await getUserByRefreshToken(refreshToken)
-
-  if (!user) {
-    deleteTokenInCookie(res)
-
-    res.send({ message: 'Logout success' })
-    return
-  }
-
-  const update = await updateUserRefreshToken(null, user.id)
-
-  if (!update) {
-    res.status(500).send({ message: 'Error when logout user' })
     return
   }
 

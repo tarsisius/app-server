@@ -1,12 +1,12 @@
 import type { Response } from 'express'
 import config from './config'
 
-export function setTokenToCookie(res: Response, token: string) {
-  res.cookie('refresh_token', token, {
+export function setTokenToCookie(res: Response, refreshToken: string) {
+  res.cookie('refresh_token', refreshToken, {
     httpOnly: true,
     secure: config.NODE_ENV !== 'developement',
     sameSite: 'strict',
-    maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days,
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 7d,
   })
 
   return

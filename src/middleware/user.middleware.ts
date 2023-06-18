@@ -8,25 +8,25 @@ export default async function privateRoute(
 ) {
   const authHeader = req.headers.authorization
 
-  if (!authHeader) {
-    res.status(401).send({ message: 'Not authorized: no accessToken' })
+  if (!authHeader?.startsWith('Bearer ')) {
+    res.status(401).send({ message: 'Unauthorized' })
     return
   }
 
-  const accessToken = authHeader.split(' ')[1]  // Bearer <accessToken>
+  const accessToken = authHeader.split(' ')[1] // Bearer <accessToken>
 
   if (accessToken) {
     const decoded = await verifyJwtAccessToken(accessToken)
 
     if (!decoded) {
-      res.status(401).send({ message: 'Not authorized: invalid accessToken' })
+      res.status(401).send({ message: 'Unauthorized: invalid accessToken' })
       return
     }
 
     res.locals.user_id = decoded.id
     return next()
   } else {
-    res.status(401).send({ message: 'Not authorized: no accessToken' })
+    res.status(401).send({ message: 'Unauthorized' })
     return
   }
 }

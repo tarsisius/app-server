@@ -1,20 +1,23 @@
 import { SignJWT, jwtVerify } from 'jose'
 import config from './config'
 
-export async function getJwtToken({ id }: { id: string }) {
+export async function getJwtAccessToken({ id }: { id: string }) {
   const accessToken = await new SignJWT({ id })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
-    .setExpirationTime('1d')
+    .setExpirationTime('1m') // 1h
     .sign(new TextEncoder().encode(config.TOKEN_ACCESS_SECRET))
 
+  return accessToken
+}
+export async function getJwtRefreshToken({ id }: { id: string }) {
   const refreshToken = await new SignJWT({ id })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
-    .setExpirationTime('7d')
+    .setExpirationTime('1d') // 7d
     .sign(new TextEncoder().encode(config.TOKEN_REFRESH_SECRET))
 
-  return { accessToken, refreshToken }
+  return refreshToken
 }
 
 export async function verifyJwtAccessToken(token: string | null) {
@@ -46,4 +49,3 @@ export async function verifyJwtRefreshToken(token: string | null) {
     return null
   }
 }
-
