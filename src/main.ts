@@ -4,10 +4,10 @@ import cookieParser from 'cookie-parser'
 import helmet from 'helmet'
 import cors from 'cors'
 
-import logger, { httpLogger } from './util/logger'
-import config from './util/config'
+import logger, { httpLogger } from './utils/logger'
+import config from './utils/config'
 
-import userRouter from './router/user.router'
+import userRoutes from './routes/user.routes'
 
 const port = config.PORT
 
@@ -21,7 +21,7 @@ function start() {
   app.use(cors())
 
   app.use(httpLogger)
-  app.use(userRouter)
+  app.use(userRoutes)
 
   app.set('port', port)
 
