@@ -19,7 +19,7 @@ export async function verifyUser(
     const decoded = await verifyJwtAccessToken(accessToken)
 
     if (!decoded) {
-      res.status(401).send({ message: 'Unauthorized: invalid accessToken' })
+      res.status(403).send({ message: 'Forbidden' })
       return
     }
 
