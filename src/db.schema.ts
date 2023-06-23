@@ -10,36 +10,36 @@ export const users = pgTable('users', {
 })
 
 export const usersRelations = relations(users, ({ many }) => ({
-  quizzes: many(quizzes),
+  posts: many(posts),
 }))
 
-export const quizzes = pgTable('quizzes', {
+export const posts = pgTable('posts', {
   id: uuid('id').primaryKey().defaultRandom(),
   name: varchar('name', { length: 256 }).notNull(),
-  ownerId: uuid('owner').notNull(),
+  userId: uuid('user_id').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
 
-export const quizzesRelations = relations(quizzes, ({ one, many }) => ({
+export const postsRelations = relations(posts, ({ one, many }) => ({
   owner: one(users, {
-    fields: [quizzes.ownerId],
+    fields: [posts.userId],
     references: [users.id],
   }),
-  questions: many(questions),
+  comments: many(comments),
 }))
 
-export const questions = pgTable('questions', {
+export const comments = pgTable('comments', {
   id: uuid('id').primaryKey().defaultRandom(),
-  quizId: uuid('quiz_id').notNull(),
+  postId: uuid('post_id').notNull(),
   question: varchar('question', { length: 256 }).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
 
-export const questionsRelations = relations(questions, ({ one }) => ({
-  quiz: one(quizzes, {
-    fields: [questions.quizId],
-    references: [quizzes.id],
+export const commentsRelations = relations(comments, ({ one }) => ({
+  post: one(posts, {
+    fields: [comments.postId],
+    references: [posts.id],
   }),
 }))

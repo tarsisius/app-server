@@ -147,6 +147,11 @@ export async function profileUserHandler(_: Request, res: Response) {
   const id = res.locals.user_id
   const user = await getUserById(id)
 
+  if(!user){
+    res.status(404).end()
+    return
+  }
+
   res.send({ ...user })
   return
 }
