@@ -5,7 +5,7 @@ export async function getJwtAccessToken({ id }: { id: string }) {
   const accessToken = await new SignJWT({ id })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
-    .setExpirationTime('30s') // 1h
+    .setExpirationTime(config.TOKEN_ACCESS_EXPIRES_IN)
     .sign(new TextEncoder().encode(config.TOKEN_ACCESS_SECRET))
 
   return accessToken
@@ -15,7 +15,7 @@ export async function getJwtRefreshToken({ id }: { id: string }) {
   const refreshToken = await new SignJWT({ id })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
-    .setExpirationTime('1m') // 7d
+    .setExpirationTime(config.TOKEN_REFRESH_EXPIRES_IN)
     .sign(new TextEncoder().encode(config.TOKEN_REFRESH_SECRET))
 
   return refreshToken

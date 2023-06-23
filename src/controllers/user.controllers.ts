@@ -119,6 +119,10 @@ export async function refreshTokenUserHandler(req: Request, res: Response) {
     return
   }
 
+  const newRefreshToken = await getJwtRefreshToken({ id: verify.id })
+
+  setRefreshTokenToCookie(res, newRefreshToken)
+
   const accessToken = await getJwtAccessToken({ id: verify.id })
 
   res.send({ accessToken })

@@ -8,6 +8,8 @@ const config = {
   DATABASE_URL: process.env.DATABASE_URL as string,
   TOKEN_ACCESS_SECRET: process.env.TOKEN_ACCESS_SECRET as string,
   TOKEN_REFRESH_SECRET: process.env.TOKEN_REFRESH_SECRET as string,
+  TOKEN_ACCESS_EXPIRES_IN: process.env.TOKEN_ACCESS_EXPIRES_IN as string,
+  TOKEN_REFRESH_EXPIRES_IN: process.env.TOKEN_REFRESH_EXPIRES_IN as string,
 }
 
 export default config
