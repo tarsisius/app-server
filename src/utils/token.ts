@@ -5,16 +5,17 @@ export async function getJwtAccessToken({ id }: { id: string }) {
   const accessToken = await new SignJWT({ id })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
-    .setExpirationTime('1m') // 1h
+    .setExpirationTime('30s') // 1h
     .sign(new TextEncoder().encode(config.TOKEN_ACCESS_SECRET))
 
   return accessToken
 }
+
 export async function getJwtRefreshToken({ id }: { id: string }) {
   const refreshToken = await new SignJWT({ id })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
-    .setExpirationTime('1d') // 7d
+    .setExpirationTime('1m') // 7d
     .sign(new TextEncoder().encode(config.TOKEN_REFRESH_SECRET))
 
   return refreshToken

@@ -6,7 +6,6 @@ import { db } from '../db.connect'
 export async function getUserById(id: string) {
   const result = await db
     .select({
-      id: users.id,
       name: users.name,
       email: users.email,
     })

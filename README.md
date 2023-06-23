@@ -71,7 +71,7 @@ body
 
 @access Public
 @desc Logout user/delete accessToken
-route GET /api/user/logout
+route POST /api/user/logout
 body none
 
 @access Public

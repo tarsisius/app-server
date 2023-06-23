@@ -9,7 +9,7 @@ export async function verifyUser(
   const authHeader = req.headers.authorization
 
   if (!authHeader?.startsWith('Bearer ')) {
-    res.status(401).send({ message: 'Unauthorized' })
+    res.status(401).end()
     return
   }
 
@@ -19,14 +19,14 @@ export async function verifyUser(
     const decoded = await verifyJwtAccessToken(accessToken)
 
     if (!decoded) {
-      res.status(403).send({ message: 'Forbidden' })
+      res.status(403).end()
       return
     }
 
     res.locals.user_id = decoded.id
     return next()
   } else {
-    res.status(401).send({ message: 'Unauthorized' })
+    res.status(401).end()
     return
   }
 }

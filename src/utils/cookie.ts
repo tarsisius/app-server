@@ -1,7 +1,7 @@
 import type { Response } from 'express'
 import config from './config'
 
-export function setTokenToCookie(res: Response, refreshToken: string) {
+export function setRefreshTokenToCookie(res: Response, refreshToken: string) {
   res.cookie('refresh_token', refreshToken, {
     httpOnly: true,
     secure: config.NODE_ENV !== 'developement',
@@ -12,7 +12,7 @@ export function setTokenToCookie(res: Response, refreshToken: string) {
   return
 }
 
-export function deleteTokenInCookie(res: Response) {
+export function deleteRefreshTokenInCookie(res: Response) {
   res.cookie('refresh_token', '', {
     httpOnly: true,
     secure: config.NODE_ENV !== 'developement',

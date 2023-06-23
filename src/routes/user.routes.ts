@@ -27,8 +27,8 @@ userRoutes.post('/user/login', loginUserHandler)
 
 // @access Public
 // @desc Logout user/delete token
-// route GET /api/user/logout
-userRoutes.get('/user/logout', logoutUserHandler)
+// route POST /api/user/logout
+userRoutes.post('/user/logout', logoutUserHandler)
 
 // @access Public
 // @desc Refresh accessToken

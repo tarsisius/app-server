@@ -19,14 +19,17 @@ import {
   getJwtRefreshToken,
   verifyJwtRefreshToken,
 } from '../utils/token'
-import { deleteTokenInCookie, setTokenToCookie } from '../utils/cookie'
+import {
+  deleteRefreshTokenInCookie,
+  setRefreshTokenToCookie,
+} from '../utils/cookie'
 
 export async function registerUserHandler(req: Request, res: Response) {
   const body = await req.body
   const parse = registerUserBody.safeParse(body)
 
   if (!parse.success) {
-    res.status(400).send({ message: 'Invalid body' })
+    res.status(400).end()
     return
   }
 
@@ -35,7 +38,7 @@ export async function registerUserHandler(req: Request, res: Response) {
   const checkEmail = await getUserByEmail(email)
 
   if (checkEmail) {
-    res.status(409).send({ message: 'Email already registered' })
+    res.status(409).end()
     return
   }
 
@@ -43,13 +46,13 @@ export async function registerUserHandler(req: Request, res: Response) {
   const user = await insertUser({ name, email, password: hashedPassword })
 
   if (!user) {
-    res.status(500).send({ message: 'Error when create user' })
+    res.status(500).end()
     return
   }
 
   const refreshToken = await getJwtRefreshToken({ id: user.id })
 
-  setTokenToCookie(res, refreshToken)
+  setRefreshTokenToCookie(res, refreshToken)
 
   const accessToken = await getJwtAccessToken({ id: user.id })
 
@@ -62,7 +65,7 @@ export async function loginUserHandler(req: Request, res: Response) {
   const parse = loginUserBody.safeParse(body)
 
   if (!parse.success) {
-    res.status(400).send({ message: 'Invalid body' })
+    res.status(400).end()
     return
   }
 
@@ -71,20 +74,20 @@ export async function loginUserHandler(req: Request, res: Response) {
   const user = await getUserByEmail(email)
 
   if (!user) {
-    res.status(401).send({ message: 'Invalid email/password' })
+    res.status(401).end()
     return
   }
 
   const validPassword = await argon2.verify(user.password, password)
 
   if (!validPassword) {
-    res.status(401).send({ message: 'Invalid email/password' })
+    res.status(401).end()
     return
   }
 
   const refreshToken = await getJwtRefreshToken({ id: user.id })
 
-  setTokenToCookie(res, refreshToken)
+  setRefreshTokenToCookie(res, refreshToken)
 
   const accessToken = await getJwtAccessToken({ id: user.id })
 
@@ -96,25 +99,27 @@ export async function refreshTokenUserHandler(req: Request, res: Response) {
   const refreshToken = req.cookies?.refresh_token
 
   if (!refreshToken) {
-    res.status(401).send({ message: 'Unauthorized' })
+    res.status(401).end()
     return
   }
 
   const verify = await verifyJwtRefreshToken(refreshToken)
 
   if (!verify) {
-    res.status(403).send({ message: 'Invalid refreshToken' })
+    deleteRefreshTokenInCookie(res)
+    res.status(401).end()
     return
   }
 
   const user = await getUserById(verify.id)
 
   if (!user) {
-    res.status(401).send({ message: 'Unauthorized' })
+    deleteRefreshTokenInCookie(res)
+    res.status(401).end()
     return
   }
 
-  const accessToken = await getJwtAccessToken({ id: user.id })
+  const accessToken = await getJwtAccessToken({ id: verify.id })
 
   res.send({ accessToken })
   return
@@ -124,13 +129,13 @@ export async function logoutUserHandler(req: Request, res: Response) {
   const refreshToken = req.cookies?.refresh_token
 
   if (!refreshToken) {
-    res.send({ message: 'Logout success' })
+    res.end()
     return
   }
 
-  deleteTokenInCookie(res)
+  deleteRefreshTokenInCookie(res)
 
-  res.send({ message: 'Logout success' })
+  res.end()
   return
 }
 
@@ -149,7 +154,7 @@ export async function updateUserNameHandler(req: Request, res: Response) {
   const parse = updateUserNameBody.safeParse(body)
 
   if (!parse.success) {
-    res.status(400).send({ message: 'Invalid body' })
+    res.status(400).end()
     return
   }
 
@@ -175,7 +180,7 @@ export async function updateUserPasswordHandler(req: Request, res: Response) {
   const parse = updateUserPasswordBody.safeParse(body)
 
   if (!parse.success) {
-    res.status(400).send({ message: 'Invalid body' })
+    res.status(400).end()
     return
   }
 
